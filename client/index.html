@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis</title>
+
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: Arial;
+            padding: 30px;
+        }
+
+        input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        #response {
+            margin-top: 30px;
+            white-space: pre-wrap;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Jarvis</h1>
+    <form onsubmit="askAI(event)">
+        <input id="prompt" placeholder="Ask something..." />
+
+        <button type="submit">
+            Send
+        </button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+
+        async function askAI(event) {
+            event.preventDefault();
+
+            const userInput =
+                document.getElementById("prompt").value;
+
+            const responseDiv =
+                document.getElementById("response");
+
+            responseDiv.innerHTML = "";
+
+            const response = await fetch(
+                `http://localhost:3030/api/ai/ask`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        userInput: userInput
+                    })
+                }
+            );
+
+            const reader =
+                response.body.getReader();
+
+            const decoder =
+                new TextDecoder();
+
+            while (true) {
+
+                const { done, value } =
+                    await reader.read();
+
+                if (done) break;
+
+                const chunk =
+                    decoder.decode(value);
+
+                responseDiv.innerHTML += chunk;
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
