@@ -6,7 +6,8 @@ const {
   openApp,
   message,
   openWebsite,
-  joinDiscordServer
+  joinDiscordServer,
+  closeApp
 } = require("../tools/ai.tools");
 
 const llm = new ChatOllama({
@@ -21,7 +22,8 @@ const model = llm.bindTools([
   openApp,
   message,
   openWebsite,
-  joinDiscordServer
+  joinDiscordServer,
+  closeApp
 ]);
 
 // c:\Users\Waheguru\Documents\CODING\PROJECTS\personal assistant\server\src\services\ai.service.js

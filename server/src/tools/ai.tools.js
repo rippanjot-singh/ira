@@ -2,6 +2,10 @@ const { tool } = require("@langchain/core/tools");
 const { z } = require("zod");
 const { exec } = require("child_process");
 const { keyboard, Key, sleep } = require("@nut-tree-fork/nut-js");
+const util = require("util");
+
+const execAsync = util.promisify(exec);
+
 
 const initializeSetup = tool(
     async () => {
@@ -228,10 +232,49 @@ const joinDiscordServer = tool(
     }
 )
 
+const closeApp = tool(
+    async ({ appName }) => {
+        try {
+
+            console.log("closing", appName);
+
+            // find matching process
+            const { stdout } = await execAsync(
+                `powershell "gps | where {$_.MainWindowTitle -like '*${appName}*'} | select -First 1 -ExpandProperty ProcessName"`
+            );
+
+            const process = stdout.trim();
+
+            if (!process) {
+                return `could not find ${appName}`;
+            }
+
+            console.log("found process:", process);
+
+            await execAsync(
+                `taskkill /IM "${process}.exe" /F`
+            );
+
+            return `${appName} closed successfully`;
+
+        } catch (error) {
+            return `error closing app: ${error.message}`;
+        }
+    },
+    {
+        name: "closeApp",
+        description: "Close an application",
+        schema: z.object({
+            appName: z.string()
+        }),
+    }
+);
+
 module.exports = {
     initializeSetup,
     openApp,
     message,
     openWebsite,
-    joinDiscordServer
+    joinDiscordServer,
+    closeApp
 }

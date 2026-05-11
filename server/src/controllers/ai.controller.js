@@ -1,5 +1,5 @@
 const run = require("../services/ai.service");
-const { initializeSetup, openApp, message, openWebsite, joinDiscordServer } = require("../tools/ai.tools");
+const { initializeSetup, openApp, message, openWebsite, joinDiscordServer, closeApp } = require("../tools/ai.tools");
 
 async function askAI(req, res) {
     try {
@@ -45,6 +45,10 @@ async function askAI(req, res) {
                     }
                     if (toolCall.name === "joinDiscordServer") {
                         const result = await joinDiscordServer.invoke(toolCall.args);
+                        res.write(`${result}`);
+                    }
+                    if (toolCall.name === "closeApp") {
+                        const result = await closeApp.invoke(toolCall.args);
                         res.write(`${result}`);
                     }
                 }
