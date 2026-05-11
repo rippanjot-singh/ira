@@ -3,18 +3,23 @@ require("@langchain/ollama");
 
 const {
   initializeSetup,
-  openApp
+  openApp,
+  message,
+  openWebsite
 } = require("../tools/ai.tools");
 
 const llm = new ChatOllama({
   model: "gemma4:latest",
   temperature: 0.7,
+    think: false
 });
 
 
 const model = llm.bindTools([
   initializeSetup,
-  openApp
+  openApp,
+  message,
+  openWebsite
 ]);
 
 // c:\Users\Waheguru\Documents\CODING\PROJECTS\personal assistant\server\src\services\ai.service.js
@@ -28,7 +33,8 @@ STRICT TOOL USAGE RULES:
 4. ONLY use 'message' if the user explicitly says "message [name] [message]".
 5. If you are unsure whether to use a tool, DO NOT use it. Default to a text response.
 6. Never hallucinate tools that don't exist.
-7. Give the answer directly, dont show the thinking process`;
+7. Give the answer directly, dont show the thinking process
+8. keep the answer very short and concise`;
 
 
 async function run(userInput) {

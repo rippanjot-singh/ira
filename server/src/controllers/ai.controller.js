@@ -1,5 +1,5 @@
 const run = require("../services/ai.service");
-const { initializeSetup, openApp, message } = require("../tools/ai.tools");
+const { initializeSetup, openApp, message, openWebsite } = require("../tools/ai.tools");
 
 async function askAI(req, res) {
     try {
@@ -37,6 +37,10 @@ async function askAI(req, res) {
                     }
                     if (toolCall.name === "message") {
                         const result = await message.invoke(toolCall.args);
+                        res.write(`${result}`);
+                    }
+                    if (toolCall.name === "openWebsite") {
+                        const result = await openWebsite.invoke(toolCall.args);
                         res.write(`${result}`);
                     }
                 }

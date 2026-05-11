@@ -11,11 +11,10 @@ const initializeSetup = tool(
             const apps = [
                 'start /B antigravity',
                 'start /B brave',
+                'start /B chatgpt',
                 'start /B "" "C:\\Users\\Waheguru\\AppData\\Local\\Discord\\Update.exe" --processStart Discord.exe',
                 'start /B "" "C:\\Users\\Waheguru\\AppData\\Local\\Postman\\Postman.exe"'
             ]
-
-
             apps.forEach(app => {
                 exec(app)
             })
@@ -94,7 +93,6 @@ const openApp = tool(
     }
 )
 
-
 const message = tool(
     async ({ name, message }) => {
         try {
@@ -160,9 +158,34 @@ const message = tool(
     }
 )
 
+const openWebsite = tool(
+    async ({ url, newWindow = false }) => {
+        try {
+            console.log('web search tool using')
+            console.log(url)
+            if (newWindow) {
+                exec(`start "" brave --new-window "${url}"`);
+            } else {
+                exec(`start "" brave "${url}"`);
+            }
+            return `Website opened successfully`
+        } catch (error) {
+            return `error opening the website: ${error.message}`
+        }
+    },
+    {
+        name: "openWebsite",
+        description: "Use this tool to open a website, always pass full path of the website, if you need to search something on internet use search.brave.com/search?q= and pass the query in the url, but the user explicitly asks for some other search engine like google or duckduckgo, then use that search engine",
+        schema: z.object({
+            url: z.string(),
+            newWindow: z.boolean().default(false)
+        }),
+    }
+)
 
 module.exports = {
     initializeSetup,
     openApp,
-    message
+    message,
+    openWebsite
 }
