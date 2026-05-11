@@ -28,7 +28,7 @@ const model = llm.bindTools([
 
 // c:\Users\Waheguru\Documents\CODING\PROJECTS\personal assistant\server\src\services\ai.service.js
 
-const systemInstruction = `You are JARVIS, a helpful AI assistant.
+const systemInstruction = `You are Ira, a helpful AI assistant.
 
 STRICT TOOL USAGE RULES:
 1. DO NOT use any tools for greetings (hi, hello, hey), casual conversation, or general questions. Just reply with friendly text.
