@@ -42,6 +42,7 @@ const openApp = tool(
     async ({ appName }) => {
         try {
             const app = appName.toLowerCase().toLowerCase().replace(/\s+/g, "")
+            console.log("App name:", app);
 
             switch (app) {
                 case "spotify":
@@ -96,7 +97,7 @@ const openApp = tool(
 const message = tool(
     async ({ name, message }) => {
         try {
-            const userName = name.toLowerCase().replace(/\s+/g, "")
+            const userName = name.toLowerCase().trim()
 
             exec("start whatsapp:");
             console.log("Whatsapp opened successfully")
@@ -175,10 +176,54 @@ const openWebsite = tool(
     },
     {
         name: "openWebsite",
-        description: "Use this tool to open a website, always pass full path of the website, if you need to search something on internet use search.brave.com/search?q= and pass the query in the url, but the user explicitly asks for some other search engine like google or duckduckgo, then use that search engine",
+        description: "Use this tool to open a website, always pass full path of the website, if you need to search something on internet use search.brave.com/search?q= and pass the query in the url, but the user explicitly asks for some other search engine like google or duckduckgo, then use that search engine. If the user ask to search something on netflix, use https://www.netflix.com/search?q= and pass the query in the url",
         schema: z.object({
             url: z.string(),
             newWindow: z.boolean().default(false)
+        }),
+    }
+)
+
+const joinDiscordServer = tool(
+    async ({ server, vc }) => {
+        try {
+            exec('start /B "" "C:\\Users\\Waheguru\\AppData\\Local\\Discord\\Update.exe" --processStart Discord.exe')
+
+            await sleep(2000);
+
+            await keyboard.pressKey(Key.LeftControl, Key.K);
+            await keyboard.releaseKey(Key.LeftControl, Key.K);
+
+            await sleep(500);
+
+            await keyboard.type(server);
+
+            await sleep(500);
+
+            await keyboard.pressKey(Key.Enter);
+            await keyboard.releaseKey(Key.Enter);
+
+            await sleep(500);
+
+            await keyboard.pressKey(Key.LeftControl, Key.K);
+            await keyboard.releaseKey(Key.LeftControl, Key.K);
+
+            await keyboard.type(vc);
+
+            await keyboard.pressKey(Key.Enter);
+            await keyboard.releaseKey(Key.Enter);
+
+            return `Discord server joined successfully`
+        } catch (error) {
+            return `error joining the discord server: ${error.message}`
+        }
+    },
+    {
+        name: "joinDiscordServer",
+        description: "Use this tool to join a discord server, always pass full path of the server and the voice channel, ",
+        schema: z.object({
+            server: z.string(),
+            vc: z.string()
         }),
     }
 )
@@ -187,5 +232,6 @@ module.exports = {
     initializeSetup,
     openApp,
     message,
-    openWebsite
+    openWebsite,
+    joinDiscordServer
 }

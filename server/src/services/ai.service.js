@@ -1,17 +1,18 @@
 const { ChatOllama } =
-require("@langchain/ollama");
+  require("@langchain/ollama");
 
 const {
   initializeSetup,
   openApp,
   message,
-  openWebsite
+  openWebsite,
+  joinDiscordServer
 } = require("../tools/ai.tools");
 
 const llm = new ChatOllama({
   model: "gemma4:latest",
   temperature: 0.7,
-    think: false
+  think: false
 });
 
 
@@ -19,7 +20,8 @@ const model = llm.bindTools([
   initializeSetup,
   openApp,
   message,
-  openWebsite
+  openWebsite,
+  joinDiscordServer
 ]);
 
 // c:\Users\Waheguru\Documents\CODING\PROJECTS\personal assistant\server\src\services\ai.service.js
@@ -39,7 +41,7 @@ STRICT TOOL USAGE RULES:
 
 async function run(userInput) {
   console.log('asking ai:', userInput);
-  
+
   const messages = [
     ["system", systemInstruction],
     ["user", userInput]
